@@ -22,8 +22,8 @@ async def main():
             artist_id="0TnOYISbd1XYRBk9myaseg",
         )
         print(json.dumps(spotify_get_artist_data_response, indent=4))
-    # except Exception as e:
-    #     print(f"Error in main: {e}")
+    except Exception as e:
+        print(f"Error in main: {e}")
     finally:
         await http.close()
 
