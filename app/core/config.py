@@ -3,7 +3,12 @@ from dynaconf import Dynaconf
 
 settings = Dynaconf(
     envvar_prefix="DYNACONF",
-    settings_files=['settings.toml', '.secrets.toml'],
+    settings_files=[
+        "config/settings.toml",
+        "config/spotify.toml",
+        "config/.secrets.toml",
+    ],
+    environments=True,
 )
 
 # `envvar_prefix` = export envvars with `export DYNACONF_FOO=bar`.
