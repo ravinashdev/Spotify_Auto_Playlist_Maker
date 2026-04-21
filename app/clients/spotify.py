@@ -22,7 +22,7 @@ class SpotifyClient:
         self._expires_at = 0
         self._lock = asyncio.Lock()
 
-    # FETCH NEW TOKEN
+    # Fetch new token when cache is emtpy
     async def _fetch_access_token(self):
         creds = f"{self.client_id}:{self.client_secret}"
         encoded_creds = base64.b64encode(creds.encode()).decode()
@@ -44,7 +44,7 @@ class SpotifyClient:
         self._access_token = data["access_token"]
         self._expires_at = time.time() + data["expires_in"] - 60
 
-    # GET TOKEN (WITH CACHE)
+    # Get Token and Check Cache to limit calling API too much
     async def get_access_token(self):
         # Check if access token is still valid in the cache based on time
         if self._access_token and time.time() < self._expires_at:
@@ -56,7 +56,7 @@ class SpotifyClient:
             await self._fetch_access_token()
             return self._access_token
 
-    # BASE REQUEST METHOD
+    # Base Request Method
     async def _request(self, method: str, endpoint: str, **kwargs):
         token = await self.get_access_token()
         headers = kwargs.pop("headers", {})
@@ -76,7 +76,7 @@ class SpotifyClient:
             raise
         return response.json()
 
-    # ENDPOINTS
+    # Endpoints
     # 1.GET Artist
     async def get_artist(self, artist_id: str):
         return await self._request(
