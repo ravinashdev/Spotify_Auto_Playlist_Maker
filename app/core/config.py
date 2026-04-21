@@ -6,6 +6,7 @@ settings = Dynaconf(
     settings_files=[
         "config/settings.toml",
         "config/spotify.toml",
+        "config/wiki.toml",
         "config/.secrets.toml",
     ],
     environments=True,
