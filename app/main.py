@@ -17,11 +17,18 @@ spotify = SpotifyClient(http, settings)
 # ---------------------------- FUNCTIONS ------------------------------- #
 async def main():
     try:
-        # Spotify Get Artist
+        # Spotify API Series Calls
         spotify_get_artist_data_response = await spotify.get_artist(
             artist_id="0TnOYISbd1XYRBk9myaseg",
         )
         print(json.dumps(spotify_get_artist_data_response, indent=4))
+        # Spotify API Parallel Calls
+        # results = await asyncio.gather(
+        #     spotify.get_artist("id1"),
+        #     spotify.get_artist("id2"),
+        #     spotify.get_artist("id3")
+        # )
+
     except Exception as e:
         print(f"Error in main: {e}")
     finally:
