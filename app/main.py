@@ -58,9 +58,14 @@ async def main(**kwargs):
                 "artist": artist,
             }
             top_100_songs_of_given_year.append(new_dict)
-        print(top_100_songs_of_given_year)
+        # print(top_100_songs_of_given_year)
 
         # Spotify API Series Calls
+        spotify_get_all_song_uris = await spotify.get_all_uris(top_100_songs_of_given_year)
+        # print(spotify_get_all_song_uris)
+        for song in spotify_get_all_song_uris:
+            print(song["uri"]["tracks"]["items"][0]["uri"])
+
         # spotify_get_artist_data_response = await spotify.get_artist(
         #     artist_id="0TnOYISbd1XYRBk9myaseg",
         # )
@@ -71,6 +76,8 @@ async def main(**kwargs):
         #     spotify.get_artist("id2"),
         #     spotify.get_artist("id3")
         # )
+        # Shave list bue to Spotify API Limit of successive requests must batch later
+
 
     except Exception as e:
         print(f"Error in main: {e}")

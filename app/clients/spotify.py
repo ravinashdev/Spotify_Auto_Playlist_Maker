@@ -83,3 +83,32 @@ class SpotifyClient:
             "GET",
             f"/artists/{artist_id}"
         )
+
+    # 2.GET URI's via Search
+    async def get_song_uri(self, song_dict:dict):
+        track = song_dict["title"]
+        artist = song_dict["artist"]
+        query = f"track:{track} artist:{artist}"
+        params={
+            "q": query,
+            "type": ["track", "artist"],
+            "limit": 1,
+        }
+        return await self._request(
+            "GET",
+            f"/search",
+            params=params
+        )
+    # 3. BATCH GET URI's via Search
+    # Running into Spotify rate limit need to batch
+    async def get_all_uris(self, songs: list[dict]):
+        semaphore = asyncio.Semaphore(10)
+        async def worker(song):
+            async with semaphore:
+                try:
+                    uri = await self.get_song_uri(song)
+                    return {"rank": song["rank"], "uri": uri}
+                except Exception:
+                    return {"rank": song["rank"], "uri": None}
+        tasks = [worker(song) for song in songs]
+        return await asyncio.gather(*tasks)

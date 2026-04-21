@@ -7,22 +7,13 @@ class WikiClient:
         self.base_url = settings.wiki.base_url
 
     # Base Request Method
-    async def _request(self, method: str, title: str, **kwargs):
-
-        url = self.base_url
-        params = {
-            "action": "parse",
-            "format": "json",
-            "prop": "text",
-            "page": title,
-        }
+    async def _request(self, method: str, **kwargs):
         headers = {
             'User-Agent': 'MediaWiki REST API docs examples/0.1 (https://www.mediawiki.org/wiki/API_talk:REST_API)'
         }
         response = await self.http.request(
             method,
-            url,
-            params=params,
+            self.base_url,
             headers=headers,
             **kwargs
         )
@@ -34,8 +25,14 @@ class WikiClient:
             raise
         return response.json()
 
-    async def get_title(self, title):
+    async def get_title(self, title:str):
+        params = {
+            "action": "parse",
+            "format": "json",
+            "prop": "text",
+            "page": title,
+        }
         return await self._request(
             "GET",
-            f"{title}"
+            params=params
         )
